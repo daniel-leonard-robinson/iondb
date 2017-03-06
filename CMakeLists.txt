@@ -42,6 +42,10 @@ if(USE_ARDUINO)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -std=c++11 -Wno-vla -Wno-vla-extension -Wno-c99-extensions -Wno-writable-strings -Wno-write-strings")
     set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -g -Wall -Wextra -pedantic -std=c99 -Wno-missing-field-initializers")
+
+    set(CMAKE_CXX_FLAGS_PRECOMPILE "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -std=c++11 -Wno-vla -Wno-vla-extension -Wno-c99-extensions -Wno-writable-strings -Wno-write-strings -E")
+    set(CMAKE_C_FLAGS_PRECOMPILE   "${CMAKE_C_FLAGS} -g -Wall -Wextra -pedantic -std=c99 -Wno-missing-field-initializers -E")
+
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
@@ -56,9 +60,10 @@ add_subdirectory(src/tests/unit/dictionary)
 
 add_subdirectory(examples)
 
-add_subdirectory(src/util/lfsr)
-
 add_subdirectory(src/iinq)
+add_subdirectory(src/util/sort/external_sort)
+add_subdirectory(src/util/sort/in_memory_sort)
+add_subdirectory(src/util/lfsr)
 add_subdirectory(src/dictionary/bpp_tree)
 add_subdirectory(src/dictionary/flat_file)
 add_subdirectory(src/dictionary/open_address_file_hash)
@@ -67,6 +72,8 @@ add_subdirectory(src/dictionary/skip_list)
 add_subdirectory(src/dictionary/linear_hash)
 
 add_subdirectory(src/tests/unit/iinq)
+add_subdirectory(src/tests/unit/util/external_sort)
+add_subdirectory(src/tests/unit/util/in_memory_sort)
 add_subdirectory(src/tests/unit/dictionary/bpp_tree)
 add_subdirectory(src/tests/unit/dictionary/flat_file)
 add_subdirectory(src/tests/unit/dictionary/open_address_file_hash)

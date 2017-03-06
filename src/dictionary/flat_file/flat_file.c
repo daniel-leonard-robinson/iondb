@@ -45,6 +45,8 @@ flat_file_initialize(
 	int		actual_filename_length = dictionary_get_filename(id, "ffs", filename);
 
 	if (actual_filename_length >= ION_MAX_FILENAME_LENGTH) {
+		printf("*** Error in filename length: %d vs %d\n", actual_filename_length, ION_MAX_FILENAME_LENGTH);
+		printf("Attempted ID: %d\n", id);
 		return err_dictionary_initialization_failed;
 	}
 
@@ -85,6 +87,7 @@ flat_file_initialize(
 	}
 
 	if (0 != fseek(flat_file->data_file, 0, SEEK_END)) {
+		printf("*** Error in ff init, attempt to seek to end\n");
 		fclose(flat_file->data_file);
 		return err_file_bad_seek;
 	}
@@ -102,6 +105,7 @@ flat_file_initialize(
 	ion_err_t			err = flat_file_scan(flat_file, -1, &loc, &row, ION_FLAT_FILE_SCAN_BACKWARDS, flat_file_predicate_not_empty);
 
 	if ((err_ok != err) && (err_file_hit_eof != err)) {
+		printf("*** Error in ff init, scan for last non empty row\n");
 		fclose(flat_file->data_file);
 		return err;
 	}

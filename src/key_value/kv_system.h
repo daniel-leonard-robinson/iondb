@@ -29,6 +29,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdint.h>
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
@@ -157,6 +158,9 @@ enum ION_ERROR {
 	/**> An error code describing the situation where an delete operation
 		 has failed. */
 	err_file_delete_error,
+	/**> An error code describing the situation where a rename operation
+	 has failed. */
+	err_file_rename_error,
 	/**> An error code describing the situation where a dictionary has failed
 		 has failed to initialize. */
 	err_dictionary_initialization_failed,
@@ -190,6 +194,9 @@ enum ION_ERROR {
 	/**> An error code returned when a dictionary of the same name as
 		 an existing dictionary is attempted to be created. */
 	err_duplicate_dictionary_error,
+	/**> An error code returned when a record is too large for some entity,
+		 such as a page or some other container. */
+	err_record_size_too_large,
 	/**> An error code describing the situation a system object was not
 		 properly initialized. */
 	err_uninitialized,
@@ -300,6 +307,65 @@ typedef struct ion_record {
 	/**< pointer to a key */
 	ion_value_t value;	/**< a pointer to value */
 } ion_record_t;
+
+/**
+@brief		An integral size type for buffers.
+@details	The size of the buffer is described in bytes.
+*/
+typedef uint32_t ion_buffer_size_t;
+
+/**
+@brief		An integral size type for pages.
+@details	The size of a page is described in bytes.
+*/
+typedef uint16_t ion_page_size_t;
+
+/**
+@brief		A comparison result type that describes the result of a comparison.
+*/
+typedef enum ION_COMPARISON {
+	less_than		= -1,	/**< The result for the comparison operation is A <= B. */
+	equal			= 0,/**< The result for the comparison operation is A == B. */
+	greater_than	= 1		/**< The result for the comparison operation is A >= B. */
+} ion_comparison_e;
+
+/**
+@brief		A status type describing the current state of an initialized cursor.
+*/
+enum ION_CURSOR_STATUS {
+	cs_invalid_index = -1,	/**< A cursor status stating that
+											 the cursor has an invalid index. */
+	cs_invalid_cursor,	/**< A cursor status stating that the
+											 cursor is generally invalid. */
+	cs_end_of_results,	/**< A cursor status stating that the
+											 the cursor has reached the end of
+											 the results. */
+	cs_cursor_initialized,	/**< A cursor status stating that the
+											 cursor has been initialized but has
+											 data that hasn't yet been
+											 accessed.
+											 Cursor is valid but data has need
+											 been accessed. */
+	cs_cursor_uninitialized,/**< A cursor status stating that
+											 the cursor has not yet been
+											 attached to a predicate statement
+											 and associated data. */
+	cs_cursor_active,	/**< A cursor status stating that
+											 the cursor is active and is
+											 traversing data. */
+	cs_possible_data_inconsistency,	/**< A cursor status stating that the
+											 data in the underlying dictionary
+											 has been changed, making the cursor
+											 invalid. */
+	cs_valid_data	/**< The data in the cursor is valid. @todo we should delete this. */
+};
+
+/**
+@brief		A type for the status of a cursor.
+@details	This allows us to control the size of the status type,
+			rather than depending on the enum.
+*/
+typedef char ion_cursor_status_t;
 
 #if defined(__cplusplus)
 }
