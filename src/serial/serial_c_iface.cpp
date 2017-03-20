@@ -23,6 +23,7 @@
 /******************************************************************************/
 
 #include "serial_c_iface.h"
+#include "stdarg.h"
 
 int
 serial_printf_c(
